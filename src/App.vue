@@ -1,6 +1,24 @@
 <template>
   <router-view/>
+  <NavBar/>
+  <BackGroundContainer/>
 </template>
+
+// 引入bootstrap
+
+<script>
+import NavBar from "@/components/NavBar.vue";
+import BackGroundContainer from "@/components/BackGroundContainer.vue";
+
+export default {
+  name: "App",
+  components: {
+    NavBar,
+    BackGroundContainer
+  }
+};
+
+</script>
 
 <style>
 #app {
