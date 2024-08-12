@@ -107,7 +107,6 @@ export default {
           this.user.password = '';
           this.user.confirmPassword = '';
           this.user.email = '';
-          // 可能还要清除错误信息
           this.errors.username = '';
           this.errors.nickname = '';
           this.errors.password = '';
@@ -210,6 +209,7 @@ button {
   border-radius: 30px;
   border: none;
   cursor: pointer;
+  font-size: 1vw;
 }
 button:hover {
   background-color: #333;

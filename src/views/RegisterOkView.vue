@@ -9,11 +9,8 @@
     <div class="right-panel">
       <div class="login-background">
         <div class="login-box">
-          <h3>登录</h3>
-          <input type="text" placeholder="用户名" />
-          <input type="password" placeholder="密码" />
-          <button @click="login">登录</button>
-          <p>没有账号？<a @click="goToRegister">立即注册</a></p>
+          <h3>注册成功，请查看邮箱激活</h3>
+          <button @click="goToLogin">返回登录</button>
         </div>
       </div>
     </div>
@@ -22,13 +19,10 @@
 
 <script>
 export default {
-  name: "LoginPage",
+  name: "RegistrationSuccessPage",
   methods: {
-    login() {
-      // 登录逻辑
-    },
-    goToRegister() {
-      this.$router.push('/register');
+    goToLogin() {
+      this.$router.push('/login');  // 确保路由配置正确
     }
   }
 }
@@ -82,7 +76,7 @@ h2 {
   margin-top: 2.5vh;
 }
 h3 {
-  font-size: 2vw;
+  font-size: 1.5vw;
   color: white;
   padding: 0;
   margin: 0 0 2vh;

@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import loginView from "@/views/LoginView.vue";
 import registerView from "@/views/RegisterView.vue";
 import NotFoundPage from "@/views/NotFoundView.vue";
+import registerOkView from "@/views/RegisterOkView.vue";
 
 const routes = [
   {
@@ -27,6 +28,15 @@ const routes = [
     path: '/register',
     name: 'RegisterPage',
     component: registerView,
+    meta: {
+      hideNavBar: true,
+      disableTransition:false,
+    }
+  },
+  {
+    path: '/register/ok',
+    name: 'RegistrationSuccessPage',
+    component: registerOkView,
     meta: {
       hideNavBar: true,
       disableTransition:false,
