@@ -10,11 +10,16 @@
       <div class="login-background">
         <div class="login-box">
           <h3>注册</h3>
-          <input type="text" placeholder="用户名" />
-          <input type="text" placeholder="昵称" />
-          <input type="password" placeholder="密码" />
-          <input type="password" placeholder="确认密码" />
-          <input type="email" placeholder="用户邮箱" />
+          <input type="text" placeholder="用户名" v-model="user.username">
+          <span v-if="errors.username">{{ errors.username }}</span>
+          <input type="text" placeholder="昵称" v-model="user.nickname">
+          <span v-if="errors.nickname">{{ errors.nickname }}</span>
+          <input type="password" placeholder="密码" v-model="user.password">
+          <span v-if="errors.password">{{ errors.password }}</span>
+          <input type="password" placeholder="确认密码" v-model="user.confirmPassword">
+          <span v-if="errors.confirmPassword">{{ errors.confirmPassword }}</span>
+          <input type="email" placeholder="用户邮箱" v-model="user.email">
+          <span v-if="errors.email">{{ errors.email }}</span>
           <button @click="register">注册</button>
           <p>已有账号？<a @click="goToLogin">立即登录</a></p>
         </div>
@@ -23,12 +28,95 @@
   </div>
 </template>
 
+
 <script>
+import sendRequest from '@/utils/http'; // 确保引入了HTTP工具
 export default {
   name: "RegisterPage",
+  data() {
+    return {
+      user: {
+        username: '',
+        nickname: '',
+        password: '',
+        confirmPassword: '',
+        email: ''
+      },
+      errors: {
+        username: '',
+        nickname: '',
+        password: '',
+        confirmPassword: '',
+        email: ''
+      }
+    };
+  },
   methods: {
-    register() {
-      // 注册逻辑
+    validateInput() {
+      let isValid = true;
+      // 验证用户名：大小写英文字母和数字，长度6-20
+      if (!/^[a-zA-Z0-9]{6,20}$/.test(this.user.username)) {
+        this.errors.username = '用户名必须为6-20位字母或数字';
+        isValid = false;
+      } else {
+        this.errors.username = '';
+      }
+      // 验证昵称长度1-20
+      if (!/^.{1,20}$/.test(this.user.nickname)) {
+        this.errors.nickname = '昵称长度必须在1-20字符之间';
+        isValid = false;
+      } else {
+        this.errors.nickname = '';
+      }
+      // 验证密码长度6-20
+      if (!/^.{6,20}$/.test(this.user.password)) {
+        this.errors.password = '密码长度必须为6-20字符';
+        isValid = false;
+      } else {
+        this.errors.password = '';
+      }
+      // 确认密码匹配
+      if (this.user.confirmPassword !== this.user.password) {
+        this.errors.confirmPassword = '确认密码不匹配';
+        isValid = false;
+      } else {
+        this.errors.confirmPassword = '';
+      }
+      // 验证邮箱格式
+      if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(this.user.email)) {
+        this.errors.email = '邮箱格式不正确';
+        isValid = false;
+      } else {
+        this.errors.email = '';
+      }
+      return isValid;
+    },
+    async register() {
+      if (this.validateInput()) {
+        // 使用定义好的工具发送GET请求
+        const { data, status, error } = await sendRequest('/users/account', 'get', null, {
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJc0FkbWluIjp0cnVlLCJVc2VySWQiOjEsImV4cCI6MTcyMzU0MTQxMH0.sPu1D1YJt4m4VK_JPtQSqmJcfOiC1lqJXm-MDnnegR4'
+          }
+        });
+
+        if (!error) {
+          // 清空输入栏
+          this.user.username = '';
+          this.user.nickname = '';
+          this.user.password = '';
+          this.user.confirmPassword = '';
+          this.user.email = '';
+          // 可能还要清除错误信息
+          this.errors.username = '';
+          this.errors.nickname = '';
+          this.errors.password = '';
+          this.errors.confirmPassword = '';
+          this.errors.email = '';
+        } else {
+          console.error('Error during GET request:', data, 'Status:', status);
+        }
+      }
     },
     goToLogin() {
       this.$router.push('/login');
@@ -36,6 +124,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .container {

@@ -24,8 +24,8 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 30px);
-  margin-top: 30px;
+  height: 100vh;
+  margin-top: 0;
   text-align: center;
 }
 
