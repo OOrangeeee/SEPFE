@@ -22,7 +22,7 @@ export default {
   height: 100%;
   pointer-events: none;
   background-color: #E7EDEB;
-  z-index: -1; /* 确保背景始终位于其他内容之下 */
+  z-index: -1;
 }
 .corner-image {
   position: absolute;

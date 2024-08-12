@@ -1,10 +1,14 @@
 <template>
-  <router-view/>
-  <NavBar/>
-  <BackGroundContainer/>
+  <div id="app">
+    <NavBar/>
+    <BackGroundContainer/>
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" v-if="Component"/>
+      </transition>
+    </router-view>
+  </div>
 </template>
-
-// 引入bootstrap
 
 <script>
 import NavBar from "@/components/NavBar.vue";
@@ -28,17 +32,12 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
-nav {
-  padding: 30px;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+  transform-origin: center center;
 }
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
 }
 </style>

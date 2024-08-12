@@ -37,30 +37,29 @@ export default {
 <style scoped>
 .navbar {
   width: 100%;
-  background-color: #e1e7e5;
+  background-color: #E7EDEB;
+  padding: 0.5%;
   position: fixed;
   top: 0;
-  padding: 2% 0;
   height: 50px;
-  overflow: hidden;
   z-index: 1000;
 }
 
 .nav-list {
-  position: absolute;
+  display: flex;
+  justify-content: space-evenly; /* 均匀分布 */
+  align-items: center; /* 垂直居中 */
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
+
 .nav-list li {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  transform: none; /* 移除之前的transform */
 }
+
 .nav-list a {
   display: inline-block;
   padding: 10px 15px;
@@ -68,6 +67,7 @@ export default {
   color: black;
   border-radius: 30px;
 }
+
 .nav-list a.active {
   background-color: #5BA98D;
   color: white;
