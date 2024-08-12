@@ -40,14 +40,16 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  height: calc(100vh - 30px);
-  margin-top: 30px;
+  height: 100vh;
+  margin-top: 0;
 }
-.left-panel, .right-panel {
+.left-panel{
   width: 38%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
+  height: 100vh;
 }
 .right-panel {
   width: 62%;
@@ -59,15 +61,14 @@ export default {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100%;
+  height: 100vh;
 }
 .home {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 50px);
-  margin-top: 30px;
+  height: 100vh;
   text-align: center;
 }
 h1 {

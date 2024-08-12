@@ -1,14 +1,15 @@
 <template>
   <div id="app">
-    <NavBar/>
+    <NavBar v-if="!hideNavBar"/>
     <BackGroundContainer/>
-    <router-view v-slot="{ Component }">
-      <transition name="fade" mode="out-in">
+    <router-view v-slot="{ Component, route }">
+      <transition :name="route.meta.disableTransition ? '' : 'fade'" mode="out-in">
         <component :is="Component" v-if="Component"/>
       </transition>
     </router-view>
   </div>
 </template>
+
 
 <script>
 import NavBar from "@/components/NavBar.vue";
@@ -19,6 +20,11 @@ export default {
   components: {
     NavBar,
     BackGroundContainer
+  },
+  computed: {
+    hideNavBar() {
+      return this.$route.meta.hideNavBar;
+    }
   }
 };
 
@@ -37,12 +43,12 @@ export default {
   transform-origin: center center;
 }
 .fade-enter, .fade-leave-to {
-  opacity: 0; /* 开始时透明，逐渐变为不透明 */
-  transform: scale(0.95); /* 开始时略微缩小，逐渐放大到正常大小 */
+  opacity: 0;
+  transform: scale(0.95);
 }
 html, body {
   height: 100%;
-  overflow: hidden; /* 隐藏滑动条 */
+  overflow: hidden;
 }
 
 
