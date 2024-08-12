@@ -37,7 +37,13 @@ export default {
   transform-origin: center center;
 }
 .fade-enter, .fade-leave-to {
-  opacity: 0;
-  transform: scale(0.95);
+  opacity: 0; /* 开始时透明，逐渐变为不透明 */
+  transform: scale(0.95); /* 开始时略微缩小，逐渐放大到正常大小 */
 }
+html, body {
+  height: 100%;
+  overflow: hidden; /* 隐藏滑动条 */
+}
+
+
 </style>

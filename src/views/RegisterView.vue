@@ -9,11 +9,14 @@
     <div class="right-panel">
       <div class="login-background">
         <div class="login-box">
-          <h3>登录</h3>
+          <h3>注册</h3>
           <input type="text" placeholder="用户名" />
+          <input type="text" placeholder="昵称" />
           <input type="password" placeholder="密码" />
-          <button @click="login">登录</button>
-          <p>没有账号？<a @click="goToRegister">立即注册</a></p>
+          <input type="password" placeholder="确认密码" />
+          <input type="email" placeholder="用户邮箱" />
+          <button @click="register">注册</button>
+          <p>已有账号？<a @click="goToLogin">立即登录</a></p>
         </div>
       </div>
     </div>
@@ -22,13 +25,13 @@
 
 <script>
 export default {
-  name: "LoginPage",
+  name: "RegisterPage",
   methods: {
-    login() {
-      // 登录逻辑
+    register() {
+      // 注册逻辑
     },
-    goToRegister() {
-      this.$router.push('/register');
+    goToLogin() {
+      this.$router.push('/login');
     }
   }
 }
@@ -58,7 +61,6 @@ export default {
   background-repeat: no-repeat;
   height: 100%;
 }
-
 .home {
   display: flex;
   flex-direction: column;
@@ -75,14 +77,12 @@ h1 {
   padding: 0;
   color: black;
 }
-
 h2 {
   color: #003E27;
   font-weight: normal;
   font-size: 1vw;
   margin-top: 2.5vh;
 }
-
 h3 {
   font-size: 2vw;
   color: white;
@@ -104,7 +104,6 @@ h3 {
   flex-direction: column;
   align-items: center;
 }
-
 input {
   width: 80%;
   padding: 1vw;
@@ -125,7 +124,7 @@ button {
 button:hover {
   background-color: #333;
 }
-p{
+p {
   font-size: 1vw;
 }
 a {
