@@ -14,6 +14,7 @@
 <script>
 import NavBar from "@/components/NavBar.vue";
 import BackGroundContainer from "@/components/BackGroundContainer.vue";
+import { setupCSRFTokenRefresh, clearCSRFTokenRefresh } from '@/utils/csrf';
 
 export default {
   name: "App",
@@ -25,10 +26,17 @@ export default {
     hideNavBar() {
       return this.$route.meta.hideNavBar;
     }
+  },
+  mounted() {
+    setupCSRFTokenRefresh();
+  },
+  beforeUnmount() {
+    clearCSRFTokenRefresh();
   }
 };
-
 </script>
+
+
 
 <style>
 #app {

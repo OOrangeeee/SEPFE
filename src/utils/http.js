@@ -1,56 +1,71 @@
 // src/utils/http.js
 import axios from 'axios';
-import qs from 'qs'; // 用于序列化表单数据
+import qs from 'qs';
 
-const BASE_URL = 'https://base.polypeye.cn/sep';
+const BASE_URL = 'http://localhost:714';
+const CSRF_TOKEN_KEY = 'X-CSRF-Token';
+
+function updateCSRFToken(headers) {
+    const csrfToken = headers[CSRF_TOKEN_KEY.toLowerCase()];
+    if (csrfToken) {
+        sessionStorage.setItem(CSRF_TOKEN_KEY, csrfToken);
+        console.log('CSRF Token updated');
+    }
+}
 
 async function sendRequest(path, method, params = [], data = null, headers = {}) {
     let url = `${BASE_URL}${path}`;
 
-    // 如果是GET请求且有参数，将参数添加到URL
     if (method.toLowerCase() === 'get' && params.length > 0) {
         url += '/' + params.join('/');
     }
 
-    // 配置请求选项
+    const csrfToken = sessionStorage.getItem(CSRF_TOKEN_KEY);
+
     const config = {
         method: method,
         url: url,
         headers: {
             ...headers,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            [CSRF_TOKEN_KEY]: csrfToken // 添加现有的CSRF令牌到请求头
         },
-        withCredentials: true, // 允许发送cookies
+        withCredentials: true,
     };
 
-    // 如果不是GET请求且有数据，序列化数据
     if (method.toLowerCase() !== 'get' && data) {
         config.data = qs.stringify(data);
     }
 
     try {
         const response = await axios(config);
+
+        // 检查响应头中是否有新的CSRF令牌，如果有则更新
+        updateCSRFToken(response.headers);
+
         return {
             data: response.data,
-            status: response.status
+            status: response.status,
+            headers: response.headers
         };
     } catch (error) {
         if (error.response) {
-            // 请求已发出但服务器响应的状态码不在 2xx 范围内
+            // 即使在错误响应中，也检查是否有新的CSRF令牌
+            updateCSRFToken(error.response.headers);
+
             return {
                 error: true,
                 data: error.response.data,
-                status: error.response.status
+                status: error.response.status,
+                headers: error.response.headers
             };
         } else if (error.request) {
-            // 请求已发出但没有收到响应
             return {
                 error: true,
                 message: "No response received",
                 status: null
             };
         } else {
-            // 在设置请求时发生了某些问题
             return {
                 error: true,
                 message: error.message,
