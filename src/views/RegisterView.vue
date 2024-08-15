@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <MessageBox :show="showMessage" :message="messageText" :type="messageType" />
     <div class="left-panel">
       <div class="home">
         <h1>THE EYE<br>FOR POLYP</h1>
@@ -30,9 +31,15 @@
 
 
 <script>
-import sendRequest from '@/utils/http'; // 确保引入了HTTP工具
+import sendRequest from '@/utils/http';
+import MessageBox from '@/components/MessageBox.vue';
+
 export default {
   name: "RegisterPage",
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    MessageBox
+  },
   data() {
     return {
       user: {
@@ -48,7 +55,10 @@ export default {
         password: '',
         confirmPassword: '',
         email: ''
-      }
+      },
+      showMessage: false,
+      messageText: '',
+      messageType: 'info'
     };
   },
   methods: {
@@ -91,30 +101,63 @@ export default {
       }
       return isValid;
     },
+    clearInputs() {
+      this.user = {
+        username: '',
+        nickname: '',
+        password: '',
+        confirmPassword: '',
+        email: ''
+      };
+      this.errors = {
+        username: '',
+        nickname: '',
+        password: '',
+        confirmPassword: '',
+        email: ''
+      };
+    },
     async register() {
       if (this.validateInput()) {
-        // 使用定义好的工具发送GET请求
-        const { data, status, error } = await sendRequest('/users/account', 'get', null, {
-          headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJc0FkbWluIjp0cnVlLCJVc2VySWQiOjEsImV4cCI6MTcyMzU0MTQxMH0.sPu1D1YJt4m4VK_JPtQSqmJcfOiC1lqJXm-MDnnegR4'
-          }
-        });
+        try {
+          const response = await sendRequest('/users/account', 'POST', [], {
+            'user-name': this.user.username,
+            'user-password': this.user.password,
+            'user-email': this.user.email,
+            'user-nickname': this.user.nickname
+          });
 
-        if (!error) {
-          // 清空输入栏
-          this.user.username = '';
-          this.user.nickname = '';
-          this.user.password = '';
-          this.user.confirmPassword = '';
-          this.user.email = '';
-          this.errors.username = '';
-          this.errors.nickname = '';
-          this.errors.password = '';
-          this.errors.confirmPassword = '';
-          this.errors.email = '';
-        } else {
-          console.error('Error during GET request:', data, 'Status:', status);
+          if (response.status === 201) {
+            // 注册成功
+            this.showMessage = true;
+            this.messageText = '注册成功！';
+            this.messageType = 'success';
+
+            // 清空输入框
+            this.clearInputs();
+
+            // 延迟跳转，给用户一些时间看到成功消息
+            setTimeout(() => {
+              this.$router.push('/register/ok');
+            }, 2000);
+          } else {
+            // 注册失败
+            const errorData = response.data;
+            this.showMessage = true;
+            this.messageText = errorData.error_message || '注册失败，请稍后重试';
+            this.messageType = 'error';
+          }
+        } catch (error) {
+          console.error('Registration error:', error);
+          this.showMessage = true;
+          this.messageText = '注册过程中发生错误，请稍后重试';
+          this.messageType = 'error';
         }
+
+        // 设置消息显示时间
+        setTimeout(() => {
+          this.showMessage = false;
+        }, 2000);
       }
     },
     goToLogin() {
