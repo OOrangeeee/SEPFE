@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <MessageBox :show="showMessage" :message="messageText" :type="messageType" />
     <div class="left-panel">
       <div class="home">
         <h1>THE EYE<br>FOR POLYP</h1>
@@ -10,8 +11,8 @@
       <div class="login-background">
         <div class="login-box">
           <h3>登录</h3>
-          <input type="text" placeholder="用户名" />
-          <input type="password" placeholder="密码" />
+          <input type="text" placeholder="用户名" v-model="username" />
+          <input type="password" placeholder="密码" v-model="password" />
           <button @click="login">登录</button>
           <p>没有账号？<a @click="goToRegister">立即注册</a></p>
         </div>
@@ -21,11 +22,66 @@
 </template>
 
 <script>
+import sendRequest from '@/utils/http';
+import MessageBox from '@/components/MessageBox.vue';
+import { setToken } from '@/utils/auth';
+
 export default {
   name: "LoginPage",
+  components: {
+    MessageBox
+  },
+  data() {
+    return {
+      username: '',
+      password: '',
+      showMessage: false,
+      messageText: '',
+      messageType: 'info'
+    };
+  },
   methods: {
-    login() {
-      // 登录逻辑
+    async login() {
+      try {
+        const formData = new FormData();
+        formData.append('user-name', this.username);
+        formData.append('user-password', this.password);
+        const response = await sendRequest('/users/login', 'POST', [], formData);
+
+        if (response.status === 200) {
+          // 登录成功
+          const data = response.data;
+          // 在这里添加 "Bearer " 前缀
+          const tokenWithBearer = `Bearer ${data.token}`;
+          console.log('tokenWithBearer:', tokenWithBearer);
+          setToken(tokenWithBearer);  // 使用 auth.js 中的 setToken 函数
+
+          this.showMessage = true;
+          this.messageText = '登录成功！';
+          this.messageType = 'success';
+
+          // 登录成功后的跳转逻辑
+          setTimeout(() => {
+            this.$router.push('/'); // 假设登录成功后跳转到首页
+          }, 2000);
+        } else {
+          // 登录失败
+          const errorData = response.data;
+          this.showMessage = true;
+          this.messageText = errorData.error_message || '登录失败，请稍后重试';
+          this.messageType = 'error';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        this.showMessage = true;
+        this.messageText = '登录过程中发生错误，请稍后重试';
+        this.messageType = 'error';
+      }
+
+      // 设置消息显示时间
+      setTimeout(() => {
+        this.showMessage = false;
+      }, 2000);
     },
     goToRegister() {
       this.$router.push('/register');
