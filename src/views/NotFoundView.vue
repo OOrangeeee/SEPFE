@@ -3,7 +3,7 @@
     <h1>404</h1>
     <p>Oops! The page you are looking for has disappeared.</p>
     <div class="orange-icon">
-      <img src="@/assets/orange_icon.png" alt="Orange Icon">
+      <img src="https://upload.polypeye.cn/web/orange_icon.png" alt="Orange Icon">
       <span>OOrangeeee<br>Jin0714@outlook.com<br>https://github.com/OOrangeeee</span>
     </div>
   </div>

@@ -1,9 +1,9 @@
 <template>
   <div class="background-container">
-    <img src="@/assets/background_east_north.png" class="corner-image northeast"  alt="背景1"/>
-    <img src="@/assets/background_west_north.png" class="corner-image northwest"  alt="背景2"/>
-    <img src="@/assets/background_east_sorth.png" class="corner-image southeast"  alt="背景3"/>
-    <img src="@/assets/background_west_sorth.png" class="corner-image southwest"  alt="背景4"/>
+    <img src="https://upload.polypeye.cn/web/background_east_north.png" class="corner-image northeast"  alt="背景1"/>
+    <img src="https://upload.polypeye.cn/web/background_west_north.png" class="corner-image northwest"  alt="背景2"/>
+    <img src="https://upload.polypeye.cn/web/background_east_sorth.png" class="corner-image southeast"  alt="背景3"/>
+    <img src="https://upload.polypeye.cn/web/background_west_sorth.png" class="corner-image southwest"  alt="背景4"/>
   </div>
 </template>
 

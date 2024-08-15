@@ -54,7 +54,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('@/assets/loginBackGround.png');
+  background-image: url('https://upload.polypeye.cn/web/loginBackGround.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
