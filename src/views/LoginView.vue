@@ -53,7 +53,6 @@ export default {
           const data = response.data;
           // 在这里添加 "Bearer " 前缀
           const tokenWithBearer = `Bearer ${data.token}`;
-          console.log('tokenWithBearer:', tokenWithBearer);
           setToken(tokenWithBearer);  // 使用 auth.js 中的 setToken 函数
 
           this.showMessage = true;
@@ -62,7 +61,7 @@ export default {
 
           // 登录成功后的跳转逻辑
           setTimeout(() => {
-            this.$router.push('/'); // 假设登录成功后跳转到首页
+            this.$router.push('/diagnosis'); // 假设登录成功后跳转到首页
           }, 2000);
         } else {
           // 登录失败
