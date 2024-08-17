@@ -5,6 +5,7 @@ import RegisterView from "@/views/RegisterView.vue"
 import NotFoundPage from "@/views/NotFoundView.vue"
 import RegisterOkView from "@/views/RegisterOkView.vue"
 import DiagnosisView from "@/views/DiagnosisView.vue"
+import UserCenterView from "@/views/UserCenterView.vue"
 
 const routes = [
   {
@@ -47,6 +48,15 @@ const routes = [
     path: '/diagnosis',
     name: 'DiagnosisPage',
     component: DiagnosisView,
+    meta: {
+      hideNavBar: false,
+      disableTransition: false,
+    }
+  },
+  {
+    path: '/user',
+    name: 'UserCenterPage',
+    component: UserCenterView,
     meta: {
       hideNavBar: false,
       disableTransition: false,

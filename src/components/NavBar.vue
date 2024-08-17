@@ -2,13 +2,12 @@
   <nav class="navbar">
     <ul class="nav-list">
       <li v-for="(item, index) in navItems" :key="index" :class="`nav-item-${index + 1}`">
-        <a
-            :href="item.link"
-            :class="{ 'active': currentPage === item.name }"
-            @click.prevent="setCurrentPage(item.name)"
+        <router-link
+            :to="item.link"
+            :class="{ 'active': $route.path === item.link }"
         >
           {{ item.name }}
-        </a>
+        </router-link>
       </li>
     </ul>
   </nav>
@@ -19,18 +18,11 @@ export default {
   name: "NavBar",
   data() {
     return {
-      currentPage: '息肉诊断',
       navItems: [
         { name: '息肉诊断', link: '/diagnosis' },
         { name: '用户中心', link: '/user' },
-        { name: '关于息肉', link: '/about' }
+        { name: '关于息肉', link: '/info' }
       ]
-    }
-  },
-  methods: {
-    setCurrentPage(pageName) {
-      this.currentPage = pageName;
-      // 这里可以添加路由导航逻辑
     }
   }
 }

@@ -67,17 +67,22 @@
         <p>{{ compressionProgress }}%</p>
       </div>
     </div>
+    <MessageBox :show="messageBoxShow" :message="messageBoxMessage" :type="messageBoxType" />
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
 import sendRequest from '@/utils/http';
-import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { fetchFile } from '@ffmpeg/util';
+import {FFmpeg} from '@ffmpeg/ffmpeg';
+import {fetchFile} from '@ffmpeg/util';
+import MessageBox from '@/components/MessageBox.vue'; // 导入 MessageBox 组件
 
 export default {
   name: 'DiagnosisPage',
+  components: {
+    MessageBox // 注册 MessageBox 组件
+  },
   setup() {
     const userNickname = ref('');
     const selectedOption = ref(null);
@@ -88,12 +93,24 @@ export default {
     const patientName = ref('');
     const showCompressionModal = ref(false);
     const compressionProgress = ref(0);
+    const messageBoxShow = ref(false);
+    const messageBoxMessage = ref('');
+    const messageBoxType = ref('info');
 
     const options = [
       {id: 'detect', name: '诊断图片检测'},
       {id: 'segment', name: '诊断图片分割'},
       {id: 'video', name: '诊断视频追踪'}
     ];
+
+    const showMessage = (message, type = 'info') => {
+      messageBoxMessage.value = message;
+      messageBoxType.value = type;
+      messageBoxShow.value = true;
+      setTimeout(() => {
+        messageBoxShow.value = false;
+      }, 3000);
+    };
 
     const fetchUserInfo = async () => {
       try {
@@ -104,10 +121,10 @@ export default {
         if (response && response.data && response.data.userInfo) {
           userNickname.value = response.data.userInfo.userNickName;
         } else {
-          console.error('获取用户信息失败: 响应格式不正确', response);
+          showMessage('获取用户信息失败: 响应格式不正确', 'error');
         }
       } catch (error) {
-        console.error('获取用户信息失败', error);
+        showMessage('获取用户信息失败', 'error');
       }
     };
 
@@ -138,11 +155,12 @@ export default {
           uploadedFile.value = file;
           fileUploaded.value = true;
         } else {
-          alert('请上传PNG格式的图片');
+          showMessage('请上传PNG格式的图片', 'error');
           resetUploadState();
         }
       }
     };
+
 
     const handleVideoUpload = async (event) => {
       const file = event.target.files[0];
@@ -151,24 +169,23 @@ export default {
           if (file.size <= 200 * 1024 * 1024) {
             showCompressionModal.value = true;
             try {
-              const compressedVideo = await compressVideo(file);
-              uploadedFile.value = compressedVideo;  // 确保这里正确设置
+              uploadedFile.value = await compressVideo(file);
               fileUploaded.value = true;
             } catch (error) {
-              console.error('视频压缩失败:', error);
-              alert('视频压缩失败，请重试');
+              showMessage('视频压缩失败，请重试', 'error');
             } finally {
               showCompressionModal.value = false;
             }
           } else {
-            alert('视频大小不能超过200MB');
+            showMessage('视频大小不能超过200MB', 'error');
           }
         } else {
-          alert('请上传MP4格式的视频');
+          showMessage('请上传MP4格式的视频', 'error');
         }
-        event.target.value = '';  // 清空文件输入
+        event.target.value = '';
       }
     };
+
 
     const compressVideo = async (file) => {
       try {
@@ -206,7 +223,7 @@ export default {
 
     const startAnalysis = async () => {
       if (!uploadedFile.value) {
-        alert('请先上传文件');
+        showMessage('请先上传文件', 'error');
         return;
       }
       showModal.value = true;
@@ -216,7 +233,7 @@ export default {
 
     const confirmAnalysis = async () => {
       if (!patientName.value) {
-        alert('请输入患者姓名');
+        showMessage('请输入患者姓名', 'error');
         return;
       }
       modalState.value = 'analyzing';
@@ -280,6 +297,9 @@ export default {
       closeModal,
       showCompressionModal,
       compressionProgress,
+      messageBoxShow,
+      messageBoxMessage,
+      messageBoxType,
     };
   }
 };
@@ -292,29 +312,33 @@ export default {
   min-height: 100vh;
   padding-top: 60px;
 }
+
 .user-nickname {
   text-align: center;
   margin-top: 4vh;
-  margin-bottom: 4vh;
+  margin-bottom: 0.5vh; /* 稍微增加底部边距 */
   font-size: 3vw;
 }
+
 .main-content-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: calc(100vh - 60px - 8vh - 3vw);
+  align-items: center; /* 改回居中对齐 */
+  height: calc(100vh - 60px - 7vh - 3vw);
 }
+
 .main-content {
   width: 70%;
-  height: 70%;
+  height: 70%; /* 固定高度 */
   background-color: rgba(24, 183, 144, 0.1);
   border-radius: 20px;
   padding: 2vw;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  justify-content: center; /* 居中对齐 */
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
 }
+
 .content-layout {
   display: flex;
   width: 100%;
