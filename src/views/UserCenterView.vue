@@ -25,6 +25,11 @@
             />
           </div>
         </div>
+        <RecordDetail
+            :show="showRecordDetail"
+            :record="selectedRecord"
+            @close="closeRecordDetail"
+        />
       </div>
     </div>
     <div v-if="showPasswordModal" class="modal">
@@ -67,12 +72,14 @@ import sendRequest from '@/utils/http';
 import { useRouter } from 'vue-router';
 import MessageBox from '@/components/MessageBox.vue';
 import DiagnosisRecord from '@/components/DiagnosisRecord.vue';
+import RecordDetail from '@/components/RecordDetail.vue';
 
 export default {
   name: 'UserCenter',
   components: {
     MessageBox,
-    DiagnosisRecord
+    DiagnosisRecord,
+    RecordDetail
   },
   setup() {
     const router = useRouter();
@@ -89,6 +96,8 @@ export default {
     const messageBoxMessage = ref('');
     const messageBoxType = ref('info');
     const records = ref([]);
+    const showRecordDetail = ref(false);
+    const selectedRecord = ref(null);
 
     const fetchRecords = async () => {
       try {
@@ -105,9 +114,25 @@ export default {
         showMessage('服务器出错啦，请稍后再试', 'error');
       }
     };
-    const handleRecordClick = (recordId) => {
-      // 处理记录点击的逻辑
-      console.log('Clicked record ID:', recordId);
+    const handleRecordClick = async (recordId) => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await sendRequest(`/users/records/${recordId}`, 'GET', [], null, {
+          Authorization: token
+        });
+        if (response.status === 200) {
+          selectedRecord.value = response.data.record;
+          showRecordDetail.value = true;
+        } else {
+          showMessage(response.data.error_message || '获取记录详情失败', 'error');
+        }
+      } catch (error) {
+        showMessage('获取记录详情失败', 'error');
+      }
+    };
+    const closeRecordDetail = () => {
+      showRecordDetail.value = false;
+      selectedRecord.value = null;
     };
 
     // 显示消息的函数
@@ -217,7 +242,10 @@ export default {
       messageBoxMessage,
       messageBoxType,
       records,
-      handleRecordClick
+      showRecordDetail,
+      selectedRecord,
+      handleRecordClick,
+      closeRecordDetail
     };
   }
 };
