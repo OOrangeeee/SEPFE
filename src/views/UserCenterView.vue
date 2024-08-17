@@ -17,7 +17,12 @@
         <div class="main-content">
           <h3 class="content-title">诊断记录</h3>
           <div class="diagnosis-records">
-            <!-- 这里将来放置诊断记录 -->
+            <DiagnosisRecord
+                v-for="record in records"
+                :key="record.id"
+                :record="record"
+                @record-clicked="handleRecordClick"
+            />
           </div>
         </div>
       </div>
@@ -61,11 +66,13 @@ import { ref, onMounted } from 'vue';
 import sendRequest from '@/utils/http';
 import { useRouter } from 'vue-router';
 import MessageBox from '@/components/MessageBox.vue';
+import DiagnosisRecord from '@/components/DiagnosisRecord.vue';
 
 export default {
   name: 'UserCenter',
   components: {
-    MessageBox
+    MessageBox,
+    DiagnosisRecord
   },
   setup() {
     const router = useRouter();
@@ -81,6 +88,27 @@ export default {
     const messageBoxShow = ref(false);
     const messageBoxMessage = ref('');
     const messageBoxType = ref('info');
+    const records = ref([]);
+
+    const fetchRecords = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await sendRequest('/users/records-all', 'GET', [], null, {
+          Authorization: token
+        });
+        if (response.status === 200) {
+          records.value = response.data.records;
+        } else {
+          showMessage('服务器出错啦，请稍后再试', 'error');
+        }
+      } catch (error) {
+        showMessage('服务器出错啦，请稍后再试', 'error');
+      }
+    };
+    const handleRecordClick = (recordId) => {
+      // 处理记录点击的逻辑
+      console.log('Clicked record ID:', recordId);
+    };
 
     // 显示消息的函数
     const showMessage = (message, type = 'info') => {
@@ -171,6 +199,7 @@ export default {
 
     onMounted(() => {
       fetchUserInfo();
+      fetchRecords();
     });
 
     return {
@@ -186,7 +215,9 @@ export default {
       logout,
       messageBoxShow,
       messageBoxMessage,
-      messageBoxType
+      messageBoxType,
+      records,
+      handleRecordClick
     };
   }
 };
@@ -326,5 +357,10 @@ export default {
 }
 .modal-content button:hover {
   background-color: #4a8c75;
+}
+.diagnosis-records {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 </style>
