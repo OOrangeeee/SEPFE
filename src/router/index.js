@@ -6,6 +6,7 @@ import NotFoundPage from "@/views/NotFoundView.vue"
 import RegisterOkView from "@/views/RegisterOkView.vue"
 import DiagnosisView from "@/views/DiagnosisView.vue"
 import UserCenterView from "@/views/UserCenterView.vue"
+import InfoView from "@/views/InfoView.vue";
 
 const routes = [
   {
@@ -63,6 +64,15 @@ const routes = [
     }
   },
   {
+    path: '/info',
+    name: 'InfoPage',
+    component: InfoView,
+    meta: {
+      hideNavBar: false,
+      disableTransition: false,
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFoundPage,
@@ -79,7 +89,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/register/ok','/:pathMatch(.*)*']
+  const publicPages = ['/','/login', '/register', '/register/ok','/:pathMatch(.*)*']
   const authRequired = !publicPages.includes(to.path)
   const token = localStorage.getItem('token')
   const tokenExpiration = localStorage.getItem('tokenExpiration')

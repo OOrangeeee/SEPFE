@@ -12,26 +12,42 @@
       </div>
     </div>
   </div>
+  <MessageBox :show="messageBoxShow" :message="messageBoxMessage" :type="messageBoxType" />
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import MessageBox from './MessageBox.vue';
 
 export default {
   name: 'RecordDetail',
+  components: {
+    MessageBox
+  },
   props: {
     show: Boolean,
     record: Object
   },
   setup(props, { emit }) {
     const isImage = computed(() => ['detect', 'segment'].includes(props.record?.type));
+    const messageBoxShow = ref(false);
+    const messageBoxMessage = ref('');
+    const messageBoxType = ref('info');
+
+    const showMessage = (message, type = 'info') => {
+      messageBoxMessage.value = message;
+      messageBoxType.value = type;
+      messageBoxShow.value = true;
+      setTimeout(() => {
+        messageBoxShow.value = false;
+      }, 3000); // 显示消息框3秒后自动关闭
+    };
 
     const onMediaLoad = (event) => {
       const { width, height } = event.target;
       const aspectRatio = width / height;
       const maxWidth = window.innerWidth * 0.8;
       const maxHeight = window.innerHeight * 0.8;
-
       if (width > maxWidth || height > maxHeight) {
         if (aspectRatio > maxWidth / maxHeight) {
           event.target.style.width = `${maxWidth}px`;
@@ -48,19 +64,35 @@ export default {
     };
 
     const downloadContent = () => {
-      const link = document.createElement('a');
-      link.href = props.record.url;
-      link.download = `record_${props.record.id}.${isImage.value ? 'jpg' : 'mp4'}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      showMessage('开始下载，请稍后。', 'info');
+      fetch(props.record.url)
+          .then(response => response.blob())
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `record_${props.record.id}.${isImage.value ? 'jpg' : 'mp4'}`;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+            showMessage('下载成功。', 'success');
+          })
+          .catch(error => {
+            console.error('下载失败:', error);
+            showMessage('下载失败，请稍后重试。', 'error');
+          });
     };
 
     return {
       isImage,
       onMediaLoad,
       close,
-      downloadContent
+      downloadContent,
+      messageBoxShow,
+      messageBoxMessage,
+      messageBoxType
     };
   }
 }
