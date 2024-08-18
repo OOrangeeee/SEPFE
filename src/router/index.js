@@ -73,14 +73,18 @@ const routes = [
     }
   },
   {
-    path: '/:pathMatch(.*)*',
+    path: '/404',
     name: 'NotFound',
     component: NotFoundPage,
     meta: {
       hideNavBar: true,
       disableTransition: false,
-    }
+    },
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/404'
+  }
 ]
 
 const router = createRouter({

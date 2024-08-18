@@ -20,6 +20,7 @@ RUN npm run build
 FROM nginx:stable-alpine as production-stage
 
 # 从构建阶段复制构建好的文件到 nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # 暴露 80 端口

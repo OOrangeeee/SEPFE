@@ -262,6 +262,7 @@ export default {
 .user-info {
   text-align: center;
   margin-top: 2vh;
+  min-height: 60px;
   margin-bottom: 2vh;
   width: 100%;
 }
@@ -278,7 +279,7 @@ export default {
   justify-content: space-between;
   width: 94vw;
   margin: 2vh auto 0;
-  height: calc(100vh - 220px);
+  height: calc(100vh - 280px);
   max-height: 580px;
 }
 .user-actions {
