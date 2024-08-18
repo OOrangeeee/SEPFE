@@ -2,7 +2,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const BASE_URL = 'http://localhost:714';
+const BASE_URL = 'https://api.polypeye.cn';
 const CSRF_TOKEN_KEY = 'X-CSRF-Token';
 
 function updateCSRFToken(headers) {
