@@ -5,6 +5,9 @@
     <h2 v-else class="user-nickname">加载中...</h2>
     <div class="main-content-wrapper">
       <div class="main-content">
+        <button v-if="selectedOption" @click="resetSelection" class="back-button">
+          &lt; 返回
+        </button>
         <div class="content-layout" :class="{ 'selected': selectedOption }">
           <div class="diagnosis-options" :class="{ 'column-layout': selectedOption }">
             <button
@@ -110,6 +113,11 @@ export default {
       setTimeout(() => {
         messageBoxShow.value = false;
       }, 3000);
+    };
+
+    const resetSelection = () => {
+      selectedOption.value = null;
+      resetUploadState();
     };
 
     const fetchUserInfo = async () => {
@@ -300,6 +308,7 @@ export default {
       messageBoxShow,
       messageBoxMessage,
       messageBoxType,
+      resetSelection,
     };
   }
 };
@@ -329,25 +338,27 @@ export default {
 
 .main-content {
   width: 70%;
-  height: 70%; /* 固定高度 */
+  height: 70%;
   background-color: rgba(24, 183, 144, 0.1);
   border-radius: 20px;
   padding: 2vw;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 居中对齐 */
+  justify-content: center;
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
+  position: relative; /* 添加这行 */
 }
 
 .content-layout {
-  display: flex;
   width: 100%;
   height: 100%;
   transition: all 0.3s ease;
+  display: flex;
   align-items: center;
 }
+
 .content-layout.selected {
-  flex-direction: row;
+  padding-top: 3vw; /* 为返回按钮留出空间 */
 }
 .diagnosis-options {
   display: flex;
@@ -465,5 +476,24 @@ input[type="file"] {
   height: 100%;
   background-color: #5BA98D;
   transition: width 0.3s ease;
+}
+.back-button {
+  position: absolute;
+  top: 1vw;
+  left: 1vw;
+  padding: 0.5vw 1vw;
+  font-size: 1.2vw;
+  cursor: pointer;
+  background-color: transparent;
+  color: #5BA98D;
+  border: 1px solid #5BA98D;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  z-index: 10; /* 确保按钮在其他元素之上 */
+}
+
+.back-button:hover {
+  background-color: #5BA98D;
+  color: white;
 }
 </style>
