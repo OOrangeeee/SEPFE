@@ -2,6 +2,7 @@
   <div id="app">
     <NavBar v-if="!hideNavBar"/>
     <BackGroundContainer/>
+    <BeianFooter/>
     <router-view v-slot="{ Component, route }">
       <transition :name="route.meta.disableTransition ? '' : 'fade'" mode="out-in">
         <component :is="Component" v-if="Component"/>
@@ -14,13 +15,15 @@
 <script>
 import NavBar from "@/components/NavBar.vue";
 import BackGroundContainer from "@/components/BackGroundContainer.vue";
+import BeianFooter from "@/components/BeianFooter.vue";
 import { setupCSRFTokenRefresh, clearCSRFTokenRefresh } from '@/utils/csrf';
 
 export default {
   name: "App",
   components: {
     NavBar,
-    BackGroundContainer
+    BackGroundContainer,
+    BeianFooter
   },
   computed: {
     hideNavBar() {
