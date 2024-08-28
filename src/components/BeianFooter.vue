@@ -28,7 +28,7 @@ export default {
   text-align: center;
   padding: 8px 0;
   z-index: 1000;
-  font-size: 0.1vw;
+  font-size: 0.7vw;
   color: #333;
 }
 
@@ -38,7 +38,7 @@ export default {
 }
 
 .beian-icon {
-  width: 0.5vw; /* 固定图标大小 */
+  width: 0.9vw; /* 固定图标大小 */
   height: auto;
   vertical-align: middle;
   margin-right: 5px; /* 在图标和文字之间添加一些间距 */
@@ -46,27 +46,5 @@ export default {
 
 .spacer {
   margin: 0 5px; /* 间隔5个空格 */
-}
-
-
-/* 响应式设计 */
-@media (min-width: 768px) {
-  .beian-footer {
-    padding: 12px 0;
-    font-size: 14px;
-  }
-  .beian-icon {
-    width: 24px; /* 增大图标 */
-  }
-}
-
-@media (min-width: 1024px) {
-  .beian-footer {
-    padding: 15px 0;
-    font-size: 16px;
-  }
-  .beian-icon {
-    width: 28px; /* 进一步增大图标 */
-  }
 }
 </style>
