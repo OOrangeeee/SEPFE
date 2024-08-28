@@ -101,9 +101,9 @@ export default {
     const messageBoxType = ref('info');
 
     const options = [
-      {id: 'detect', name: '诊断图片检测'},
-      {id: 'segment', name: '诊断图片分割'},
-      {id: 'video', name: '诊断视频追踪'}
+      {id: 'detect', name: '肠镜图片检测'},
+      {id: 'segment', name: '肠镜图片分割'},
+      {id: 'video', name: '肠镜视频追踪'}
     ];
 
     const showMessage = (message, type = 'info') => {
