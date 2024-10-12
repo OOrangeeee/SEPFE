@@ -1,8 +1,19 @@
 <template>
   <div class="diagnosis-page">
     <div class="navbar-placeholder"></div>
-    <h2 v-if="userNickname" class="user-nickname">{{ userNickname }}医生</h2>
-    <h2 v-else class="user-nickname">加载中...</h2>
+    <div class="software-info">
+      <div class="software-box">
+        <div class="software-left">
+          <img src="https://upload.polypeye.cn/web/tablogo.png" alt="软件图片" class="software-image">
+        </div>
+        <div class="software-right">
+          <h2 class="software-name">THE EYE FOR POLYP<br></h2>
+          <p class="software-description">结直肠息肉智慧诊断云平台</p>
+        </div>
+      </div>
+
+    </div>
+
     <div class="main-content-wrapper">
       <div class="main-content">
         <button v-if="selectedOption" @click="resetSelection" class="back-button">
@@ -316,18 +327,72 @@ export default {
 
 <style scoped>
 .diagnosis-page {
-  display: flex;
   flex-direction: column;
   min-height: 100vh;
   padding-top: 60px;
+  overflow-y: auto; /* 允许垂直滚动 */
+  height: 100vh; /* 确保高度占满视口，使滚动条生效 */
 }
 
-.user-nickname {
-  text-align: center;
+/* 替换原有的 .user-nickname 样式 */
+.software-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 4vh;
-  margin-bottom: 0.5vh; /* 稍微增加底部边距 */
-  font-size: 3vw;
+  margin-bottom: 0; /* 根据需求调整间距 */
 }
+
+.software-box {
+  display: flex; /* 使用 Flexbox 布局 */
+  flex-direction: row; /* 水平方向排列 */
+  width: 70%; /* 保持原有宽度 */
+  height: 70%;
+  background-color: rgba(6, 124, 95, 0.1);
+  border-radius: 20px;
+  padding: 2vw;
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
+}
+
+.software-left {
+  flex: 0 0 15%; /* 左侧区域占据30% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.software-right {
+  flex: 0 0 85%; /* 右侧区域占据70% */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 垂直居中 */
+  align-items: flex-end; /* 水平右对齐 */
+}
+
+.software-image {
+  max-width: 100%; /* 确保图片不超出容器 */
+  height: auto; /* 让图片保持比例 */
+}
+
+.software-name {
+  font-size: 5vw; /* 调整软件名称的字体大小 */
+  color: #000000; /* 字体颜色 */
+  margin-top: 20vh; /* 增加与名称之间的间距 */
+  text-align: right; /* 文本内容右对齐 */
+}
+
+
+.software-description {
+  font-size: 1.5vw; /* 调整描述文本的字体大小 */
+  font-weight: normal; /* 设置为正常粗细 */
+  color: rgba(0, 58, 9, 0.49); /* 描述文本颜色 */
+  margin-top: 2vh; /* 增加与名称之间的间距 */
+  margin-bottom: 20vh; /* 增加下方留白 */
+  text-align: right; /* 文本内容右对齐 */
+}
+
+
+
 
 .main-content-wrapper {
   display: flex;
