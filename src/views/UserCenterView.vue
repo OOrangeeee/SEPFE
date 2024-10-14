@@ -106,7 +106,8 @@ export default {
           Authorization: token
         });
         if (response.status === 200) {
-          records.value = response.data.records;
+          // 将 records 数据反转顺序
+          records.value = response.data.records.reverse();
         } else {
           showMessage('服务器出错啦，请稍后再试', 'error');
         }
@@ -295,15 +296,15 @@ export default {
   padding: 1.5vh 0;
   font-size: 1.5vw;
   cursor: pointer;
-  background-color: #5BA98D;
-  color: white;
+  background: linear-gradient(to right, #5BA98D, #9AD7CA); /* 渐变色从左到右 */
+  color: white; /* 保持按钮文字为白色 */
   border: none;
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 .action-button.logout {
-  background-color: #d9534f;
 }
+
 .action-button:hover {
   opacity: 0.8;
 }

@@ -9,6 +9,8 @@
         <div class="software-right">
           <h2 class="software-name">THE EYE FOR POLYP<br></h2>
           <p class="software-description">结直肠息肉智慧诊断云平台</p>
+          <p class="welcome-text">欢迎您，{{ userNickname }}</p>
+          <p class="down-text">下拉查看更多功能</p>
         </div>
       </div>
 
@@ -33,14 +35,14 @@
           <div v-if="selectedOption" class="right-content">
             <div v-if="selectedOption !== 'video'" class="image-upload">
               <label for="file-upload" class="custom-file-upload">
-                <input id="file-upload" type="file" @change="handleFileUpload" accept=".png" />
+                <input id="file-upload" type="file" @change="handleFileUpload" accept=".png"/>
                 上传PNG图片
               </label>
               <span v-if="fileUploaded" class="upload-success">✓</span>
             </div>
             <div v-else class="video-upload">
               <label for="video-upload" class="custom-file-upload">
-                <input id="video-upload" type="file" @change="handleVideoUpload" accept=".mp4" />
+                <input id="video-upload" type="file" @change="handleVideoUpload" accept=".mp4"/>
                 上传MP4视频 (最大200MB)
               </label>
               <span v-if="fileUploaded" class="upload-success">✓</span>
@@ -81,7 +83,7 @@
         <p>{{ compressionProgress }}%</p>
       </div>
     </div>
-    <MessageBox :show="messageBoxShow" :message="messageBoxMessage" :type="messageBoxType" />
+    <MessageBox :show="messageBoxShow" :message="messageBoxMessage" :type="messageBoxType"/>
   </div>
 </template>
 
@@ -214,7 +216,7 @@ export default {
           coreURL: '/ffmpeg/ffmpeg-core.js',
           wasmURL: '/ffmpeg/ffmpeg-core.wasm',
         });
-        ffmpeg.on('progress', ({ progress }) => {
+        ffmpeg.on('progress', ({progress}) => {
           compressionProgress.value = Math.round(progress * 100);
         });
         await ffmpeg.writeFile('input.mp4', await fetchFile(file));
@@ -326,6 +328,25 @@ export default {
 </script>
 
 <style scoped>
+
+button {
+  background: linear-gradient(to right, #5BA98D, #9AD7CA); /* 渐变色从左到右 */
+  color: white; /* 确保按钮文字为白色 */
+  border: none;
+  border-radius: 10px;
+  padding: 1.5vh 0;
+  font-size: 1.5vw;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+button:hover {
+  background: linear-gradient(to right, #4a8c75, #82c3b4); /* 悬停时稍微改变渐变色 */
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.18);
+}
+
 .diagnosis-page {
   flex-direction: column;
   min-height: 100vh;
@@ -377,7 +398,19 @@ export default {
 .software-name {
   font-size: 5vw; /* 调整软件名称的字体大小 */
   color: #000000; /* 字体颜色 */
-  margin-top: 20vh; /* 增加与名称之间的间距 */
+  margin-top: 25vh;
+  text-align: right; /* 文本内容右对齐 */
+}
+
+.welcome-text{
+  font-size: 1.5vw; /* 调整软件名称的字体大小 */
+  color: #034d31; /* 字体颜色 */
+  text-align: right; /* 文本内容右对齐 */
+}
+
+.down-text{
+  font-size: 1vw; /* 调整软件名称的字体大小 */
+  color: #034d31; /* 字体颜色 */
   text-align: right; /* 文本内容右对齐 */
 }
 
@@ -387,11 +420,9 @@ export default {
   font-weight: normal; /* 设置为正常粗细 */
   color: rgba(0, 58, 9, 0.49); /* 描述文本颜色 */
   margin-top: 2vh; /* 增加与名称之间的间距 */
-  margin-bottom: 20vh; /* 增加下方留白 */
+  margin-bottom: 19vh; /* 增加下方留白 */
   text-align: right; /* 文本内容右对齐 */
 }
-
-
 
 
 .main-content-wrapper {
@@ -425,6 +456,7 @@ export default {
 .content-layout.selected {
   padding-top: 3vw; /* 为返回按钮留出空间 */
 }
+
 .diagnosis-options {
   display: flex;
   justify-content: space-between;
@@ -433,12 +465,14 @@ export default {
   height: auto;
   transition: all 0.3s ease;
 }
+
 .diagnosis-options.column-layout {
   flex-direction: column;
   width: 40%;
   height: 100%;
   justify-content: space-around;
 }
+
 .diagnosis-options button {
   width: 30%;
   height: 10vh;
@@ -454,13 +488,16 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
 .diagnosis-options.column-layout button {
   width: 90%;
   height: 25%;
 }
+
 .diagnosis-options button.active {
   background-color: #4a8c75;
 }
+
 .right-content {
   display: flex;
   flex-direction: column;
@@ -469,34 +506,46 @@ export default {
   width: 60%;
   height: 100%;
 }
+
 .custom-file-upload {
-  display: inline-block;
+  background: linear-gradient(to right, #5BA98D, #9AD7CA); /* 渐变色从左到右 */
+  color: white;
+  border-radius: 10px;
   padding: 1.5vw 3vw;
   cursor: pointer;
-  margin-bottom: 2vw;
-  color: white;
-  background-color: #5BA98D;
-  border-radius: 10px;
   font-size: 1.8vw;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.custom-file-upload:hover {
+  background: linear-gradient(to right, #4A8C75, #82C3B4); /* 改变渐变色 */
+  transform: translateY(-2px); /* 向上微移 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 4px rgba(0, 0, 0, 0.15);
+}
+
 input[type="file"] {
   display: none;
 }
+
 .upload-success {
   color: #5BA98D;
   margin-left: 1vw;
   font-size: 1.8vw;
 }
+
 .start-analysis {
-  padding: 1.5vw 3vw;
-  font-size: 1.8vw;
-  cursor: pointer;
-  background-color: #5BA98D;
+  background: linear-gradient(to right, #5BA98D, #9AD7CA); /* 渐变色从左到右 */
   color: white;
   border: none;
   border-radius: 10px;
+  padding: 1.5vw 3vw;
+  font-size: 1.8vw;
+  cursor: pointer;
   margin-top: 2vw;
 }
+
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -509,17 +558,20 @@ input[type="file"] {
   align-items: center;
   z-index: 1000;
 }
+
 .modal-content {
   background-color: white;
   padding: 2rem;
   border-radius: 10px;
   text-align: center;
 }
+
 .modal-content input {
   margin: 1rem 0;
   padding: 0.5rem;
   width: 100%;
 }
+
 .modal-content button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
@@ -529,6 +581,7 @@ input[type="file"] {
   border-radius: 5px;
   cursor: pointer;
 }
+
 .progress-bar {
   width: 100%;
   height: 20px;
@@ -537,11 +590,13 @@ input[type="file"] {
   margin-top: 1rem;
   overflow: hidden;
 }
+
 .progress {
   height: 100%;
   background-color: #5BA98D;
   transition: width 0.3s ease;
 }
+
 .back-button {
   position: absolute;
   top: 1vw;
@@ -550,7 +605,7 @@ input[type="file"] {
   font-size: 1.2vw;
   cursor: pointer;
   background-color: transparent;
-  color: #5BA98D;
+  color: white;
   border: 1px solid #5BA98D;
   border-radius: 5px;
   transition: all 0.3s ease;
