@@ -1,7 +1,7 @@
 <template>
   <footer class="beian-footer">
     <div class="beian-info">
-      <img src="https://upload.software.oorangeeee.com/images/%E5%A4%87%E6%A1%88%E5%9B%BE%E6%A0%87.png" alt="备案图标" class="beian-icon">
+      <img src="https://upload.polypeye.cn/beian/%E5%A4%87%E6%A1%88%E5%9B%BE%E6%A0%87.png" alt="备案图标" class="beian-icon">
       <a href="https://beian.mps.gov.cn/#/query/webSearch?code=42011102005601" rel="noreferrer" target="_blank">
         鄂公网安备42011102005601
       </a>
